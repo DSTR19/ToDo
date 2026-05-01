@@ -11,7 +11,7 @@ env-down:
 env-cleanup:
 	@read -p "Очистить все volume файлы окружения? Опасность утери данных! (y/n) " ans;\
 	if [ "$$ans" = "y" ]; then \
-		docker compose down -v postgres && echo "Volume файлы очищены."; \
+		docker compose down -v postgres port-forwarder && echo "Volume файлы очищены."; \
 		rm -rf out/pgdata; \
 		echo "Директория данных удалена."; \
 	else \

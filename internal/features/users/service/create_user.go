@@ -1,0 +1,22 @@
+package users_service
+
+import (
+	"context"
+	"fmt"
+
+	"github.com/DSTR19/ToDo/internal/core/domain"
+)
+
+func (s *UsersService) CreateUser(
+	ctx context.Context,
+	user domain.User,
+) (domain.User, error) {
+	if err := user.Validate(); err != nil {
+		return domain.User{}, fmt.Errorf("Validate user error: %w", err)
+	}
+	user, err := s.userRepository.CreateUser(ctx, user)
+	if err != nil {
+		return domain.User{}, fmt.Errorf("Create user error: %w", err)
+	}
+	return user, nil
+}
