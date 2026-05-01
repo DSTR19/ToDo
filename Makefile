@@ -49,3 +49,19 @@ env-port-forward:
 	@docker compose up -d port-forwarder
 env-port-forward-close:
 	@docker compose down port-forwarder
+
+todoapp-stop:
+	@PORT=$$(echo $(HTTP_SERVER_ADDR) | sed 's/^://'); \
+	PIDS=$$(lsof -ti:$$PORT); \
+	if [ -n "$$PIDS" ]; then \
+		echo "Останавливаю процессы на порту $$PORT: $$PIDS"; \
+		kill $$PIDS; \
+		sleep 1; \
+	else \
+		echo "Порт $$PORT свободен."; \
+	fi
+
+todoapp-run: todoapp-stop
+	@export LOGGER_FOLDER=$(PROJECT_ROOT)/out/logs && \
+	go mod tidy && \
+	go run cmd/todoapp/main.go
